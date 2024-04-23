@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import './index.css';
+import GroceryList from './components/GroceryList';
 
 function App() {
+  const [groceries, setGroceries] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleAddGrocery = () => {
+    if (inputValue.trim() !== '') {
+      setGroceries([...groceries, inputValue]);
+      setInputValue('');
+    }
+  };
+
+  const handleDeleteGrocery = (index) => {
+    const updatedGroceries = groceries.filter((item, i) => i !== index);
+    setGroceries(updatedGroceries);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1>Grocery Bud</h1>
+      <div className="input-container">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Add grocery item..."
+        />
+        <button onClick={handleAddGrocery}>Add</button>
+      </div>
+      <GroceryList groceries={groceries} onDeleteGrocery={handleDeleteGrocery} />
     </div>
   );
 }
